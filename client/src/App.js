@@ -13,6 +13,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import { UserProvider } from "./context/UserContext";
 import GradeResources from "./components/GradeResources";
+import GradeSidebar from "./components/GradeSidebar";
 
 // Home page component
 const Home = () => (

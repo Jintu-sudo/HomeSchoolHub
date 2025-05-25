@@ -61,7 +61,7 @@ const Navbar = () => {
           {/* Right Side Buttons */}
           <div className="d-flex align-items-center gap-2 ms-4 flex-wrap">
             <a
-              href="https://twitter.com/yourpage"
+              href="https://x.com/"
               target="_blank"
               rel="noopener noreferrer"
               className={`btn btn-sm btn-outline-${darkMode ? "light" : "dark"} d-flex align-items-center gap-1`}
@@ -71,7 +71,7 @@ const Navbar = () => {
             </a>
 
             <a
-              href="https://instagram.com/yourpage"
+              href="https://instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
               className={`btn btn-sm btn-outline-${darkMode ? "light" : "dark"} d-flex align-items-center gap-1`}
@@ -81,7 +81,7 @@ const Navbar = () => {
             </a>
 
             <a
-              href="https://facebook.com/yourpage"
+              href="https://facebook.com/"
               target="_blank"
               rel="noopener noreferrer"
               className={`btn btn-sm btn-outline-${darkMode ? "light" : "dark"} d-flex align-items-center gap-1`}
