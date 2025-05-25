@@ -1,5 +1,6 @@
 import React from "react";
 import { useUser } from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -26,8 +27,9 @@ const Dashboard = () => {
     {
       title: "Profile Settings",
       description: "Update your personal and homeschooling preferences.",
-      url: "https://www.gravatar.com/",
+      url: "/profile",
       icon: "bi-person-gear",
+      internal: true,  // Mark internal for react-router Link
     },
   ];
 
@@ -65,21 +67,46 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Quick Links */}
       <h5 className="text-secondary mb-3">Quick Links</h5>
-      <div className="row g-4">
+      <div className="row g-4 mb-4">
         {quickLinks.map((link, index) => (
           <div key={index} className="col-md-6 col-lg-3">
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
-              <div className="card h-100 border-0 shadow-sm hover-shadow-lg transition">
-                <div className="card-body text-center">
-                  <i className={`bi ${link.icon} fs-1 text-primary mb-3`}></i>
-                  <h6 className="card-title fw-bold text-dark">{link.title}</h6>
-                  <p className="card-text text-muted small">{link.description}</p>
+            {link.internal ? (
+              <Link to={link.url} className="text-decoration-none">
+                <div className="card h-100 border-0 shadow-sm hover-shadow-lg transition">
+                  <div className="card-body text-center">
+                    <i className={`bi ${link.icon} fs-1 text-primary mb-3`}></i>
+                    <h6 className="card-title fw-bold text-dark">{link.title}</h6>
+                    <p className="card-text text-muted small">{link.description}</p>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </Link>
+            ) : (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                <div className="card h-100 border-0 shadow-sm hover-shadow-lg transition">
+                  <div className="card-body text-center">
+                    <i className={`bi ${link.icon} fs-1 text-primary mb-3`}></i>
+                    <h6 className="card-title fw-bold text-dark">{link.title}</h6>
+                    <p className="card-text text-muted small">{link.description}</p>
+                  </div>
+                </div>
+              </a>
+            )}
           </div>
         ))}
+      </div>
+
+      {/* Grade Resources Link */}
+      <div className="text-center">
+        <Link to="/grade-resources" className="btn btn-primary btn-lg">
+          View Resources for Grade {user?.gradeLevel || "N/A"}
+        </Link>
       </div>
     </div>
   );

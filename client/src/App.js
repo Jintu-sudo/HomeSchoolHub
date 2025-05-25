@@ -11,7 +11,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import { UserProvider } from "./context/UserContext"; // ✅ context added
+import { UserProvider } from "./context/UserContext";
+import GradeResources from "./components/GradeResources";
 
 // Home page component
 const Home = () => (
@@ -35,6 +36,8 @@ function AppLayout() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        {/* Private routes all wrapped exactly the same */}
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/resources" element={<PrivateRoute><Resources /></PrivateRoute>} />
         <Route path="/forum" element={<PrivateRoute><Forum /></PrivateRoute>} />
@@ -42,6 +45,11 @@ function AppLayout() {
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
         <Route path="/contact" element={<PrivateRoute><Contact /></PrivateRoute>} />
+
+        {/* Your new route with the same wrapping */}
+        <Route path="/grade-resources" element={<PrivateRoute><GradeResources /></PrivateRoute>} />
+
+        {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
