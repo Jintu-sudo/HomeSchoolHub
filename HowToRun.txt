@@ -1,0 +1,56 @@
+How to Run This Project
+=======================
+
+1. Prerequisites
+---------------
+- Make sure you have Node.js installed (version 14 or above recommended).
+- Make sure you have npm (Node Package Manager) installed. It usually comes with Node.js.
+
+2. Clone the repository
+----------------------
+Open your terminal/command prompt and run:
+
+    git clone <your-repo-url>
+    cd <your-repo-folder>
+
+3. Install dependencies
+-----------------------
+Run the following command to install the required packages:
+
+    npm install
+
+4. Start the development server
+-------------------------------
+Run this command to start the app locally:
+
+    npm start
+
+This will start the React development server, usually on:
+
+    http://localhost:3000
+
+Open this URL in your web browser to see the app running.
+
+5. Using the App
+----------------
+- The app allows you to add, edit, and delete events.
+- Events are saved locally in your browser’s localStorage.
+- The calendar shows events by date.
+- You must be logged in (or mock login depending on your context) to save your own events.
+
+6. Build for production (optional)
+----------------------------------
+To create an optimized production build, run:
+
+    npm run build
+
+This will generate a `build` folder with static files that you can deploy.
+
+7. Additional Notes
+-------------------
+- Make sure you have an internet connection to fetch dependencies on the first install.
+- If you have any issues or questions, please open an issue in the repository.
+
+---
+
+Thank you for using the project!
