@@ -20,27 +20,40 @@ const Register = () => {
     try {
       await axios.post("http://localhost:5000/api/users/register", form);
       alert("Registration successful!");
-      navigate("/login"); // Redirect to login after successful registration
+      navigate("/login");
     } catch (err) {
       alert(err.response?.data?.msg || "Registration failed");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {["name", "email", "password", "location", "gradeLevel"].map((field) => (
-        <input
-          key={field}
-          type={field === "password" ? "password" : "text"}
-          name={field}
-          placeholder={field}
-          value={form[field]}
-          onChange={handleChange}
-          required
-        />
-      ))}
-      <button type="submit">Register</button>
-    </form>
+    <div className="container mt-5" style={{ maxWidth: "600px" }}>
+      <div className="card shadow p-4">
+        <h2 className="mb-4 text-center">Register</h2>
+        <form onSubmit={handleSubmit}>
+          {["name", "email", "password", "location", "gradeLevel"].map((field) => (
+            <div className="mb-3" key={field}>
+              <label htmlFor={field} className="form-label text-capitalize">
+                {field}
+              </label>
+              <input
+                type={field === "password" ? "password" : field === "email" ? "email" : "text"}
+                className="form-control"
+                id={field}
+                name={field}
+                placeholder={`Enter your ${field}`}
+                value={form[field]}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          ))}
+          <button type="submit" className="btn btn-primary w-100 mt-2">
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

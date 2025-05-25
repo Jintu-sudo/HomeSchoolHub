@@ -13,32 +13,40 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/users/login", form);
 
-      // Store token and user info (if your backend returns user details)
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user)); // adjust if your API returns user
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert("Login successful");
-      navigate("/dashboard"); // Redirect to dashboard after login
+      navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {["email", "password"].map((field) => (
-        <input
-          key={field}
-          type={field === "password" ? "password" : "text"}
-          name={field}
-          placeholder={field}
-          value={form[field]}
-          onChange={handleChange}
-          required
-        />
-      ))}
-      <button type="submit">Login</button>
-    </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <form onSubmit={handleSubmit} className="p-4 border rounded shadow" style={{ minWidth: "300px" }}>
+        <h2 className="mb-4 text-center">Login</h2>
+
+        {["email", "password"].map((field) => (
+          <div className="mb-3" key={field}>
+            <input
+              type={field === "password" ? "password" : "email"}
+              name={field}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              value={form[field]}
+              onChange={handleChange}
+              required
+              className="form-control"
+            />
+          </div>
+        ))}
+
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
+      </form>
+    </div>
   );
 };
 
