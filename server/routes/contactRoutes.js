@@ -25,8 +25,8 @@ router.post("/", async (req, res) => {
       },
     });
 
-    // Email content
-    const mailOptions = {
+    // Email content to admin
+    const mailOptionsAdmin = {
       from: `"Homeschool Hub Contact" <${process.env.EMAIL_USER}>`,
       to: process.env.ADMIN_EMAIL,
       subject: "New Contact Form Submission",
@@ -38,8 +38,25 @@ router.post("/", async (req, res) => {
       `,
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    // Email content to user (confirmation)
+    const mailOptionsUser = {
+      from: `"Homeschool Hub" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Thank you for contacting Homeschool Hub!",
+      html: `
+        <p>Hi ${name},</p>
+        <p>Thank you for reaching out to us. We have received your message:</p>
+        <blockquote>${message}</blockquote>
+        <p>We will get back to you shortly.</p>
+        <p>Best regards,<br/>Homeschool Hub Team</p>
+      `,
+    };
+
+    // Send email to admin
+    await transporter.sendMail(mailOptionsAdmin);
+
+    // Send confirmation email to user
+    await transporter.sendMail(mailOptionsUser);
 
     res.status(200).json({ msg: "Message received, thank you!" });
   } catch (err) {
