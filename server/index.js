@@ -4,6 +4,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const eventRoutes = require("./routes/eventRoutes");
+const forumRoutes = require("./routes/forumRoutes");
 
 const app = express();
 
@@ -21,6 +24,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/homeschool-hub", {
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/forum", forumRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
