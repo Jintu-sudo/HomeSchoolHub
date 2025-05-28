@@ -1,17 +1,43 @@
-// components/GradeSidebar.js
 import React, { useState } from "react";
+import { useLocation, Link } from "react-router-dom";
 import gradeResources from "../data/GradeResourceData";
 
+const allGrades = [
+  "Nursery",
+  "KG",
+  "Grade 1",
+  "Grade 2",
+  "Grade 3",
+  "Grade 4",
+  "Grade 5",
+  "Grade 6",
+  "Grade 7",
+  "Grade 8",
+  "Grade 9",
+  "Grade 10",
+  "Grade 11",
+  "Grade 12",
+];
+
 const GradeSidebar = () => {
+  const location = useLocation();
+  const hiddenPaths = ["/", "/login", "/register"];
+  const shouldHideSidebar = hiddenPaths.includes(location.pathname);
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [showDialog, setShowDialog] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const handleGradeClick = (grade) => {
-    setSelectedGrade(grade);
-    setSelectedSubject(null);
+    if (grade === "Grade 1") {
+      setSelectedGrade(grade);
+      setSelectedSubject(null);
+    } else {
+      setShowDialog(true);
+    }
   };
 
   const handleSubjectClick = (subject) => {
@@ -20,6 +46,8 @@ const GradeSidebar = () => {
 
   const selectedGradeData = gradeResources.find((g) => g.grade === selectedGrade);
 
+  if (shouldHideSidebar) return null;
+
   return (
     <>
       {/* Toggle Button */}
@@ -27,8 +55,8 @@ const GradeSidebar = () => {
         onClick={toggleSidebar}
         style={{
           position: "fixed",
-          top: 20,
-          right: isOpen ? 320 : 20,
+          top: 80,
+          left: isOpen ? 320 : 20,
           zIndex: 1001,
           padding: "10px 15px",
           borderRadius: "5px",
@@ -36,7 +64,7 @@ const GradeSidebar = () => {
           backgroundColor: "#0d6efd",
           color: "white",
           cursor: "pointer",
-          transition: "right 0.3s ease",
+          transition: "left 0.3s ease",
         }}
         aria-label={isOpen ? "Close Grade Sidebar" : "Open Grade Sidebar"}
       >
@@ -47,17 +75,17 @@ const GradeSidebar = () => {
       <div
         style={{
           position: "fixed",
-          top: 0,
-          right: isOpen ? 0 : -320,
+          top: 70,
+          left: isOpen ? 0 : -320,
           width: 320,
-          height: "100vh",
+          height: "calc(100vh - 70px)",
           backgroundColor: "white",
-          borderLeft: "1px solid #ddd",
-          boxShadow: "-3px 0 5px rgba(0,0,0,0.1)",
+          borderRight: "1px solid #ddd",
+          boxShadow: "3px 0 5px rgba(0,0,0,0.1)",
           padding: "1rem",
           overflowY: "auto",
           zIndex: 1000,
-          transition: "right 0.3s ease",
+          transition: "left 0.3s ease",
         }}
       >
         <h5 className="mb-3 text-primary">Grades</h5>
@@ -65,7 +93,7 @@ const GradeSidebar = () => {
         {/* Grade List */}
         {!selectedGrade ? (
           <ul className="list-group">
-            {gradeResources.map(({ grade }) => (
+            {allGrades.map((grade) => (
               <li
                 key={grade}
                 className={`list-group-item list-group-item-action ${
@@ -84,9 +112,8 @@ const GradeSidebar = () => {
           </ul>
         ) : !selectedSubject ? (
           <>
-            {/* Subject List */}
             <button
-              className="btn btn-link mb-3"
+              className="btn btn-link mb-3 p-0"
               onClick={() => setSelectedGrade(null)}
             >
               ← Back to Grades
@@ -113,9 +140,8 @@ const GradeSidebar = () => {
           </>
         ) : (
           <>
-            {/* Lessons List */}
             <button
-              className="btn btn-link mb-3"
+              className="btn btn-link mb-3 p-0"
               onClick={() => setSelectedSubject(null)}
             >
               ← Back to Subjects
@@ -126,36 +152,69 @@ const GradeSidebar = () => {
             <ul className="list-group">
               {selectedGradeData.subjects
                 .find((subj) => subj.name === selectedSubject)
-                .lessons.map(({ title, url, type, description }, idx) => (
+                .lessons.map(({ title, slug }, idx) => (
                   <li
                     key={idx}
                     className="list-group-item d-flex justify-content-between align-items-start"
                   >
                     <div className="pe-2">
                       <div className="fw-semibold">{title}</div>
-                      <div className="text-muted" style={{ fontSize: "0.9rem" }}>
-                        {description}
-                      </div>
                     </div>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to={`/lesson/${encodeURIComponent(selectedGrade)}/${encodeURIComponent(selectedSubject)}/${encodeURIComponent(slug)}`}
                       className="btn btn-sm btn-outline-primary ms-2"
-                      aria-label={`Open ${title}`}
                     >
-                      {type === "pdf"
-                        ? "PDF"
-                        : type === "video"
-                        ? "Video"
-                        : "Link"}
-                    </a>
+                      View
+                    </Link>
                   </li>
                 ))}
             </ul>
           </>
         )}
       </div>
+
+      {/* Popup Dialog for grades without content */}
+      {showDialog && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.4)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 2000,
+          }}
+          onClick={() => setShowDialog(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "white",
+              borderRadius: "8px",
+              padding: "2rem",
+              maxWidth: "320px",
+              textAlign: "center",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+            }}
+          >
+            <h5 className="mb-3">Coming Soon</h5>
+            <p>More content to be added in the future.</p>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowDialog(false)}
+              autoFocus
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

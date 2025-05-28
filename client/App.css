@@ -1,9 +1,9 @@
-/* App.css */
-
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa; /* fallback for bg image */
 }
 
 .app-background {
@@ -28,10 +28,12 @@ body, html {
   }
 }
 
-/* Optional: make main content slightly transparent with backdrop blur */
 .main-glass {
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(4px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
   border-radius: 12px;
   padding: 2rem;
+  min-height: 80vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin: 20px;
 }

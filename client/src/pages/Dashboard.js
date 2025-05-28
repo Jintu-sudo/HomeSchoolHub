@@ -29,7 +29,7 @@ const Dashboard = () => {
       description: "Update your personal and homeschooling preferences.",
       url: "/profile",
       icon: "bi-person-gear",
-      internal: true,  // Mark internal for react-router Link
+      internal: true, // Mark internal for react-router Link
     },
   ];
 
@@ -100,13 +100,6 @@ const Dashboard = () => {
             )}
           </div>
         ))}
-      </div>
-
-      {/* Grade Resources Link */}
-      <div className="text-center">
-        <Link to="/grade-resources" className="btn btn-primary btn-lg">
-          View Resources for Grade {user?.gradeLevel || "N/A"}
-        </Link>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "../api/axios"; 
 
 const Profile = () => {
   const storedUser = JSON.parse(localStorage.getItem("user")) || {
@@ -6,6 +7,9 @@ const Profile = () => {
     email: "",
     location: "",
     gradeLevel: "",
+    phone: "",
+    bio: "",
+    website: "",
   };
 
   const [user, setUser] = useState(storedUser);
@@ -21,8 +25,7 @@ const Profile = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    // Simple validation
+  const handleSave = async () => {
     if (!form.email || !form.email.includes("@")) {
       alert("Please enter a valid email.");
       return;
@@ -32,11 +35,36 @@ const Profile = () => {
       return;
     }
 
-    // Save to state and localStorage
-    setUser(form);
-    localStorage.setItem("user", JSON.stringify(form));
-    setEditMode(false);
-    alert("Profile updated successfully!");
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        "/profile",
+        {
+          name: form.name,
+          email: form.email,
+          location: form.location,
+          gradeLevel: form.gradeLevel,
+          phone: form.phone,
+          bio: form.bio,
+          website: form.website,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const updatedUser = response.data.user;
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setEditMode(false);
+      alert("Profile updated successfully!");
+    } catch (err) {
+      console.error("Failed to update profile:", err);
+      alert("Something went wrong while updating your profile.");
+    }
   };
 
   const handleLogout = () => {
@@ -47,7 +75,12 @@ const Profile = () => {
 
   const renderField = (label, value) => (
     <p>
-      <strong>{label}:</strong> {value || "N/A"}
+      <strong>{label}:</strong>{" "}
+      {label === "Website" && value ? (
+        <a href={value} target="_blank" rel="noopener noreferrer">{value}</a>
+      ) : (
+        value || "N/A"
+      )}
     </p>
   );
 
@@ -62,18 +95,15 @@ const Profile = () => {
             {renderField("Email", user.email)}
             {renderField("Location", user.location)}
             {renderField("Grade Level", user.gradeLevel)}
+            {renderField("Phone", user.phone)}
+            {renderField("Bio", user.bio)}
+            {renderField("Website", user.website)}
 
             <div className="d-flex gap-2 mt-4">
-              <button
-                onClick={() => setEditMode(true)}
-                className="btn btn-primary"
-              >
+              <button onClick={() => setEditMode(true)} className="btn btn-primary">
                 Edit Profile
               </button>
-              <button
-                onClick={handleLogout}
-                className="btn btn-outline-danger"
-              >
+              <button onClick={handleLogout} className="btn btn-outline-danger">
                 Logout
               </button>
             </div>
@@ -90,20 +120,34 @@ const Profile = () => {
               { name: "email", label: "Email", type: "email" },
               { name: "location", label: "Location" },
               { name: "gradeLevel", label: "Grade Level" },
+              { name: "phone", label: "Phone Number", type: "tel" },
+              { name: "bio", label: "Bio", type: "textarea" },
+              { name: "website", label: "Website", type: "url" },
             ].map(({ name, label, type = "text" }) => (
               <div className="mb-3" key={name}>
                 <label htmlFor={name} className="form-label">
                   {label}
                 </label>
-                <input
-                  type={type}
-                  id={name}
-                  name={name}
-                  className="form-control"
-                  value={form[name]}
-                  onChange={handleChange}
-                  required={name === "name" || name === "email"}
-                />
+                {type === "textarea" ? (
+                  <textarea
+                    id={name}
+                    name={name}
+                    className="form-control"
+                    value={form[name]}
+                    onChange={handleChange}
+                    rows="3"
+                  />
+                ) : (
+                  <input
+                    type={type}
+                    id={name}
+                    name={name}
+                    className="form-control"
+                    value={form[name]}
+                    onChange={handleChange}
+                    required={name === "name" || name === "email"}
+                  />
+                )}
               </div>
             ))}
 
@@ -111,11 +155,7 @@ const Profile = () => {
               <button type="submit" className="btn btn-success">
                 Save
               </button>
-              <button
-                type="button"
-                onClick={() => setEditMode(false)}
-                className="btn btn-secondary"
-              >
+              <button type="button" onClick={() => setEditMode(false)} className="btn btn-secondary">
                 Cancel
               </button>
             </div>
