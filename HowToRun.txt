@@ -15,15 +15,36 @@ Open your terminal/command prompt and run:
 
 3. Install dependencies
 -----------------------
-Run the following command to install the required packages:
+Run the following command to install the required packages on both the client and server directories:
 
     npm install
+    npm install -g nodemon
+    if it shows error something like :
+                                
+                                                             cannot be 
+                                                            loaded because running scripts is 
+                                                            disabled on this system. For more 
+                                                            information, see 
+                                                            about_Execution_Policies at https:/go
+                                                            .microsoft.com/fwlink/?LinkID=135170.
+                                                            At line:1 char:1
+                                                            + npm run start-legacy
+                                                            + ~~~
+                                                                + CategoryInfo          : Securi 
+                                                               tyError: (:) [], PSSecurityExcep  
+                                                              tion
+                                                                + FullyQualifiedErrorId : Unauth 
+                                                               orizedAccess 
+
+
+    run : Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 4. Start the development server
 -------------------------------
 Run this command to start the app locally:
-
-    npm start
+    mongod --dbpath "C:\HomeSchoolHub\server\data\db"     
+    nodemon index.js
+    npm run start-legacy
 
 This will start the React development server, usually on:
 
